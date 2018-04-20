@@ -1,0 +1,59 @@
+{
+  "options": {
+    "offset": 0,
+    "separator": "\n",
+    "follow": true
+  },
+  "checkpoints": {
+    "directory": "/tmp",
+    "rate": 10000
+  },
+  "outputs": [{
+    "module": "seguir-kinesis",
+    "kinesis": {
+      "endpoint": "http://localhost:4567",
+      "accessKeyId": "yourAccessKeyId",
+      "secretAccessKey": "yourSecretAccessKey",
+      "region": "us-east-1",
+      "sslEnabled": false
+    },
+    "streams": [{
+        "streamName": "test.partition.key",
+        "maxRecords": 500,
+        "maxBytes": 5242880,
+        "msFlushRate": 1000,
+        "maxRetries": 3,
+        "partitionKey": "TestPartitionKey",
+        "files": [
+          "/tmp/test\\.partition\\.key\\.log"
+        ]
+      },
+      {
+        "streamName": "test.partition.key.property",
+        "maxRecords": 500,
+        "maxBytes": 5242880,
+        "msFlushRate": 1000,
+        "maxRetries": 3,
+        "partitionKeyProperty": "X-TraceId",
+        "files": [
+          "/tmp/test\\.partition\\.key\\.property\\.log"
+        ]
+      },
+      {
+        "streamName": "test.partition.key.date",
+        "maxRecords": 500,
+        "maxBytes": 5242880,
+        "msFlushRate": 1000,
+        "maxRetries": 3,
+        "files": [
+          "/tmp/test.partition\\.key\\.date\\.log"
+        ]
+      }
+    ]
+  }],
+  "files": [
+    "/tmp/test.partition.key.log",
+    "/tmp/test.partition.key.property.log",
+    "/tmp/test.partition.key.date.log"
+  ]
+}

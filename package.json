@@ -1,0 +1,33 @@
+{
+  "name": "seguir-cdc",
+  "version": "1.0.0",
+  "description": "Contractual driven tests for seguir.",
+  "scripts": {
+    "seguir-kinesis": "./scripts/seguir-kinesis.sh"
+  },
+  "private": "true",
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexandermjames/seguir-cdc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alexandermjames/seguir-cdc/issues",
+    "email": "matt.j.alexander@utah.edu"
+  },
+  "author": "Matthew Alexander <matt.j.alexander@utah.edu>",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.226.1",
+    "bunyan": "^1.8.12",
+    "kinesalite": "^1.13.0",
+    "mocha": "^5.1.1"
+  },
+  "pkg": {
+    "scripts": "test/**/*.js, posttest/**/*.sh, pretest/**/*.sh, scripts/**/*.sh",
+    "assets": "conf/**/*.json"
+  }
+}
