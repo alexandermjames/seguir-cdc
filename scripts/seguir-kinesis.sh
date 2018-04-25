@@ -6,7 +6,6 @@ EXEC_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 RC=$?
 if [ "${RC}" -ne 0 ]; then
-  echo "seguir-kinesis startup script failed to run successfully."
   "${EXEC_DIRECTORY}"/../posttest/seguir-kinesis.sh
   exit 1
 fi
@@ -15,7 +14,6 @@ fi
 
 RC=$?
 if [ "${RC}" -ne 0 ]; then
-  echo "seguir-kinesis tests failed to run successfully."
   "${EXEC_DIRECTORY}"/../posttest/seguir-kinesis.sh
   exit 1
 fi
@@ -24,6 +22,5 @@ fi
 
 RC=$?
 if [ "${RC}" -ne 0 ]; then
-  echo "seguir-kinesis cleanup script failed to run successfully."
   exit 1
 fi

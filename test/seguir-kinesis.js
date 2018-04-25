@@ -3,6 +3,12 @@
 const AWS = require("aws-sdk");
 const fs = require("fs");
 const assert = require("assert");
+const bunyan = require("bunyan");
+
+const log = bunyan.createLogger({
+  name: "seguir-cdc",
+  file: "seguir-kinesis.js"
+});
 
 const kinesis = new AWS.Kinesis({
   accessKeyId: "accessKeyId",
@@ -28,11 +34,15 @@ const getRecords = (data) => {
   }).promise();
 };
 
-const readRecords = (data) => {
+const readRecords = (startTime, data) => {
+  if (process.hrtime(startTime)[0] >= 5) {
+    return Promise.resolve(data);
+  }
+
   if (data.Records.length === 0) {
     return getRecords({
       ShardIterator: data.NextShardIterator
-    }).then(readRecords.bind(this));
+    }).then(readRecords.bind(this, startTime));
   }
 
   return Promise.resolve(data);
@@ -48,7 +58,7 @@ describe("seguir-kinesis", function() {
         }).promise()
         .then(getShardIterator.bind(this, "test.partition.key"))
         .then(getRecords.bind(this))
-        .then(readRecords.bind(this))
+        .then(readRecords.bind(this, process.hrtime()))
         .then((data) => {
           const records = data.Records;
           assert.equal(records.length, 1, "Expected a single message to be published.");
@@ -75,7 +85,7 @@ describe("seguir-kinesis", function() {
         }).promise()
         .then(getShardIterator.bind(this, "test.partition.key.property"))
         .then(getRecords.bind(this))
-        .then(readRecords.bind(this))
+        .then(readRecords.bind(this, process.hrtime()))
         .then((data) => {
           const records = data.Records;
           assert.equal(records.length, 1, "Expected a single message to be published.");
@@ -84,7 +94,7 @@ describe("seguir-kinesis", function() {
           done();
         })
         .catch((err) => {
-          console.error(err);
+          log.error(err);
         });
     });
   });
@@ -98,7 +108,7 @@ describe("seguir-kinesis", function() {
         }).promise()
         .then(getShardIterator.bind(this, "test.partition.key.date"))
         .then(getRecords.bind(this))
-        .then(readRecords.bind(this))
+        .then(readRecords.bind(this, process.hrtime()))
         .then((data) => {
           const records = data.Records;
           assert.equal(records.length, 1, "Expected a single message to be published.");
@@ -107,7 +117,7 @@ describe("seguir-kinesis", function() {
           done();
         })
         .catch((err) => {
-          console.error(err);
+          log.error(err);
         });
     });
   });
